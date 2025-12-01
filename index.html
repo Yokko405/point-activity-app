@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ポイ活アプリ</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 10px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .level-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.3);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .tabs {
+            display: flex;
+            background: #f5f5f5;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 14px;
+            font-weight: bold;
+            color: #666;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            background: white;
+            color: #f5576c;
+            border-bottom: 3px solid #f5576c;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .dashboard {
+            text-align: center;
+        }
+
+        .dashboard-summary {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .calendar-nav-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .calendar-nav {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #667eea;
+            padding: 10px;
+        }
+
+        .dashboard-calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            margin-top: 15px;
+        }
+
+        .cal-day-header {
+            text-align: center;
+            font-weight: bold;
+            padding: 10px 5px;
+            color: #666;
+            font-size: 12px;
+        }
+
+        .cal-day {
+            aspect-ratio: 1;
+            border: 2px solid #f0f0f0;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 5px;
+            position: relative;
+            min-height: 60px;
+        }
+
+        .cal-day.other-month {
+            opacity: 0.3;
+        }
+
+        .cal-day.today {
+            border-color: #f5576c;
+            background: rgba(245, 87, 108, 0.1);
+        }
+
+        .cal-day-number {
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 3px;
+        }
+
+        .cal-day-icons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2px;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .cal-day-points {
+            font-size: 9px;
+            color: #667eea;
+            font-weight: bold;
+            margin-top: auto;
+        }
+
+        .current-points {
+            font-size: 64px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 20px 0;
+        }
+
+        .points-display {
+            margin-bottom: 20px;
+        }
+
+        .total-points {
+            font-size: 18px;
+            color: #666;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .total-points span {
+            color: #667eea;
+            font-size: 20px;
+        }
+
+        .goal-section {
+            margin: 20px 0;
+        }
+
+        .goal-input {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .goal-input input {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            width: 120px;
+            font-size: 16px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-danger {
+            background: #f5576c;
+            color: white;
+        }
+
+        .btn-small {
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #f0f0f0;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #8BC34A);
+            transition: width 0.5s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .record-form {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .form-group input[type="date"] {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        .item-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .item-btn {
+            padding: 15px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .item-btn:active {
+            transform: scale(0.95);
+        }
+
+        .item-icon {
+            font-size: 24px;
+        }
+
+        .item-points {
+            background: rgba(255,255,255,0.9);
+            padding: 5px 10px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        .item-form {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 10px;
+        }
+
+        .item-form input {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        .color-picker, .icon-picker {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 10px;
+            margin-top: 5px;
+        }
+
+        .color-option {
+            aspect-ratio: 1;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .color-option.selected {
+            border-color: #333;
+            transform: scale(1.2);
+        }
+
+        .icon-option {
+            font-size: 24px;
+            text-align: center;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 10px;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .icon-option.selected {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .managed-items {
+            display: grid;
+            gap: 10px;
+        }
+
+        .managed-item {
+            padding: 15px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .managed-item-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .records-list {
+            display: grid;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .record-item {
+            padding: 15px;
+            border-radius: 10px;
+            background: #f9f9f9;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .record-date {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .history-list {
+            display: grid;
+            gap: 15px;
+        }
+
+        .history-month {
+            padding: 20px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+        }
+
+        .history-month-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .history-month-title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .history-month-points {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .success-message {
+            background: #4CAF50;
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            text-align: center;
+            display: none;
+        }
+
+        @keyframes pointGain {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .point-gain-animation {
+            animation: pointGain 0.5s;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 ポイ活アプリ</h1>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" data-tab="dashboard">📊 ダッシュボード</button>
+            <button class="tab" data-tab="record">✏️ 記録</button>
+            <button class="tab" data-tab="items">⚙️ アイテム</button>
+            <button class="tab" data-tab="history">📜 履歴</button>
+        </div>
+
+        <div id="dashboard" class="tab-content active">
+            <div class="dashboard">
+                <div class="calendar-nav-wrapper">
+                    <button class="calendar-nav" id="dashPrevMonth">◀</button>
+                    <h3 id="dashCalendarTitle"></h3>
+                    <button class="calendar-nav" id="dashNextMonth">▶</button>
+                </div>
+                <div class="dashboard-calendar" id="dashboardCalendar"></div>
+                <div class="dashboard-summary">
+                    <div class="points-display">
+                        <div class="current-points" id="currentPoints">0</div>
+                        <div class="total-points">累計: <span id="totalPoints">0</span>pt</div>
+                    </div>
+                    <div id="goalDisplay" style="display:none;">
+                        <p style="margin: 10px 0;">目標: <span id="goalValue">0</span>pt</p>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill">0%</div>
+                        </div>
+                    </div>
+                    <div class="goal-input">
+                        <input type="number" id="goalInput" placeholder="目標ポイント（任意）">
+                        <button class="btn btn-primary" id="setGoalBtn">目標設定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="record" class="tab-content">
+            <h2>達成を記録</h2>
+            <div class="success-message" id="successMessage">記録しました！</div>
+            <div class="record-form">
+                <div class="form-group">
+                    <label>日付</label>
+                    <input type="date" id="recordDate">
+                </div>
+                <div class="form-group">
+                    <label>アイテムを選択</label>
+                    <div class="item-buttons" id="recordItemButtons"></div>
+                </div>
+            </div>
+            <h3>今日の記録</h3>
+            <div class="records-list" id="todayRecords"></div>
+        </div>
+
+        <div id="items" class="tab-content">
+            <h2>アイテム管理</h2>
+            <div class="item-form">
+                <div class="form-group">
+                    <label>アイテム名</label>
+                    <input type="text" id="itemName" placeholder="例: 筋トレ">
+                </div>
+                <div class="form-group">
+                    <label>ポイント数</label>
+                    <input type="number" id="itemPoints" placeholder="10">
+                </div>
+                <div class="form-group">
+                    <label>カラー</label>
+                    <div class="color-picker" id="colorPicker"></div>
+                </div>
+                <div class="form-group">
+                    <label>アイコン</label>
+                    <input type="text" id="iconInput" placeholder="絵文字を入力 例: 🚴" maxlength="2" style="width: 100px; text-align: center; font-size: 24px;">
+                    <div style="font-size: 12px; color: #999; margin-top: 5px;">またはプリセットから選択↓</div>
+                    <div class="icon-picker" id="iconPicker"></div>
+                </div>
+                <button class="btn btn-primary" id="addItemBtn">アイテム追加</button>
+            </div>
+            <div class="managed-items" id="managedItems"></div>
+        </div>
+
+        <div id="history" class="tab-content">
+            <h2>月次履歴</h2>
+            <div class="history-list" id="historyList"></div>
+        </div>
+    </div>
+
+    <script>
+        var COLORS = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E2'];
+        var ICONS = ['💪', '📚', '🏃', '🧘', '🎯', '✍️', '🎨', '🎵', '🍎', '💤', '🧹', '💰'];
+        
+        var dashboardViewDate = new Date();
+        var editingItemId = null;
+        var selectedColor = COLORS[0];
+        var selectedIcon = ICONS[0];
+        
+        var data = {
+            items: [],
+            records: [],
+            monthlyGoals: {},
+            totalPoints: 0
+        };
+
+        function loadData() {
+            var saved = localStorage.getItem('pointActivityData');
+            if (saved) {
+                data = JSON.parse(saved);
+            }
+        }
+
+        function saveData() {
+            localStorage.setItem('pointActivityData', JSON.stringify(data));
+        }
+
+        function getTodayString() {
+            var today = new Date();
+            return today.getFullYear() + '-' + 
+                   String(today.getMonth() + 1).padStart(2, '0') + '-' + 
+                   String(today.getDate()).padStart(2, '0');
+        }
+
+        function getCurrentMonth() {
+            var today = new Date();
+            return today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0');
+        }
+
+        function calculateTotalPoints() {
+            var total = 0;
+            for (var i = 0; i < data.records.length; i++) {
+                var r = data.records[i];
+                for (var j = 0; j < data.items.length; j++) {
+                    if (data.items[j].id === r.itemId) {
+                        total += data.items[j].points;
+                        break;
+                    }
+                }
+            }
+            return total;
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(function(t) {
+                t.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-content').forEach(function(c) {
+                c.classList.remove('active');
+            });
+            
+            document.querySelector('[data-tab="' + tabName + '"]').classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+            
+            if (tabName === 'dashboard') {
+                renderDashboard();
+            } else if (tabName === 'record') {
+                renderRecordTab();
+            } else if (tabName === 'history') {
+                renderHistory();
+            }
+        }
+
+        function renderColorPicker() {
+            var picker = document.getElementById('colorPicker');
+            picker.innerHTML = '';
+            for (var i = 0; i < COLORS.length; i++) {
+                var div = document.createElement('div');
+                div.className = 'color-option' + (i === 0 ? ' selected' : '');
+                div.style.background = COLORS[i];
+                div.setAttribute('data-index', i);
+                picker.appendChild(div);
+            }
+        }
+
+        function renderIconPicker() {
+            var picker = document.getElementById('iconPicker');
+            picker.innerHTML = '';
+            for (var i = 0; i < ICONS.length; i++) {
+                var div = document.createElement('div');
+                div.className = 'icon-option' + (i === 0 ? ' selected' : '');
+                div.textContent = ICONS[i];
+                div.setAttribute('data-index', i);
+                picker.appendChild(div);
+            }
+        }
+
+        function addItem() {
+            var name = document.getElementById('itemName').value.trim();
+            var points = parseInt(document.getElementById('itemPoints').value);
+            var iconFromInput = document.getElementById('iconInput').value.trim();
+            var finalIcon = iconFromInput || selectedIcon;
+
+            if (!name || !points) {
+                alert('アイテム名とポイント数を入力してください');
+                return;
+            }
+
+            if (!finalIcon) {
+                alert('アイコンを選択または入力してください');
+                return;
+            }
+
+            if (editingItemId) {
+                for (var i = 0; i < data.items.length; i++) {
+                    if (data.items[i].id === editingItemId) {
+                        data.items[i].name = name;
+                        data.items[i].points = points;
+                        data.items[i].color = selectedColor;
+                        data.items[i].icon = finalIcon;
+                        break;
+                    }
+                }
+                editingItemId = null;
+            } else {
+                data.items.push({
+                    id: Date.now(),
+                    name: name,
+                    points: points,
+                    color: selectedColor,
+                    icon: finalIcon
+                });
+            }
+
+            saveData();
+            document.getElementById('itemName').value = '';
+            document.getElementById('itemPoints').value = '';
+            document.getElementById('iconInput').value = '';
+            renderItems();
+            renderRecordTab();
+        }
+
+        function editItem(id) {
+            for (var i = 0; i < data.items.length; i++) {
+                if (data.items[i].id === id) {
+                    var item = data.items[i];
+                    document.getElementById('itemName').value = item.name;
+                    document.getElementById('itemPoints').value = item.points;
+                    document.getElementById('iconInput').value = item.icon;
+                    
+                    selectedColor = item.color;
+                    selectedIcon = item.icon;
+                    
+                    var colorIndex = COLORS.indexOf(item.color);
+                    var iconIndex = ICONS.indexOf(item.icon);
+                    
+                    document.querySelectorAll('.color-option').forEach(function(el, idx) {
+                        if (idx === colorIndex) {
+                            el.classList.add('selected');
+                        } else {
+                            el.classList.remove('selected');
+                        }
+                    });
+                    
+                    document.querySelectorAll('.icon-option').forEach(function(el, idx) {
+                        if (idx === iconIndex) {
+                            el.classList.add('selected');
+                        } else {
+                            el.classList.remove('selected');
+                        }
+                    });
+                    
+                    editingItemId = id;
+                    window.scrollTo(0, 0);
+                    break;
+                }
+            }
+        }
+
+        function deleteItem(id) {
+            if (!confirm('このアイテムを削除しますか？')) return;
+            
+            data.items = data.items.filter(function(i) { return i.id !== id; });
+            data.records = data.records.filter(function(r) { return r.itemId !== id; });
+            saveData();
+            renderItems();
+            renderDashboard();
+            renderRecordTab();
+        }
+
+        function renderItems() {
+            var container = document.getElementById('managedItems');
+            container.innerHTML = '';
+            
+            for (var i = 0; i < data.items.length; i++) {
+                var item = data.items[i];
+                var div = document.createElement('div');
+                div.className = 'managed-item';
+                div.style.background = item.color;
+                div.innerHTML = '<div class="item-info"><span class="item-icon">' + item.icon + '</span><span>' + item.name + ' (' + item.points + 'pt)</span></div><div class="managed-item-actions"><button class="btn btn-primary btn-small" data-edit="' + item.id + '">編集</button><button class="btn btn-danger btn-small" data-delete="' + item.id + '">削除</button></div>';
+                container.appendChild(div);
+            }
+        }
+
+        function recordItem(itemId) {
+            var dateStr = document.getElementById('recordDate').value;
+            if (!dateStr) {
+                alert('日付を選択してください');
+                return;
+            }
+
+            data.records.push({
+                id: Date.now(),
+                itemId: itemId,
+                date: dateStr
+            });
+            saveData();
+            
+            var msg = document.getElementById('successMessage');
+            msg.style.display = 'block';
+            setTimeout(function() {
+                msg.style.display = 'none';
+            }, 2000);
+            
+            var pointsEl = document.getElementById('currentPoints');
+            pointsEl.classList.add('point-gain-animation');
+            setTimeout(function() {
+                pointsEl.classList.remove('point-gain-animation');
+            }, 500);
+            
+            renderDashboard();
+            renderRecordTab();
+        }
+
+        function deleteRecord(id) {
+            if (!confirm('この記録を削除しますか？')) return;
+            data.records = data.records.filter(function(r) { return r.id !== id; });
+            saveData();
+            renderDashboard();
+            renderRecordTab();
+        }
+
+        function renderRecordTab() {
+            var dateInput = document.getElementById('recordDate');
+            if (!dateInput.value) {
+                dateInput.value = getTodayString();
+            }
+            
+            var container = document.getElementById('recordItemButtons');
+            container.innerHTML = '';
+            
+            for (var i = 0; i < data.items.length; i++) {
+                var item = data.items[i];
+                var btn = document.createElement('button');
+                btn.className = 'item-btn';
+                btn.style.background = item.color;
+                btn.innerHTML = '<div><span class="item-icon">' + item.icon + '</span> ' + item.name + '</div><div class="item-points">+' + item.points + 'pt</div>';
+                btn.setAttribute('data-record', item.id);
+                container.appendChild(btn);
+            }
+            
+            var todayRecords = data.records.filter(function(r) { 
+                return r.date === dateInput.value; 
+            });
+            
+            var todayContainer = document.getElementById('todayRecords');
+            todayContainer.innerHTML = '';
+            
+            for (var j = 0; j < todayRecords.length; j++) {
+                var record = todayRecords[j];
+                var item = null;
+                for (var k = 0; k < data.items.length; k++) {
+                    if (data.items[k].id === record.itemId) {
+                        item = data.items[k];
+                        break;
+                    }
+                }
+                
+                if (item) {
+                    var div = document.createElement('div');
+                    div.className = 'record-item';
+                    
+                    var itemInfo = document.createElement('div');
+                    itemInfo.innerHTML = '<span class="item-icon">' + item.icon + '</span> ' + item.name + ' (+' + item.points + 'pt)';
+                    
+                    var deleteBtn = document.createElement('button');
+                    deleteBtn.className = 'btn btn-danger btn-small';
+                    deleteBtn.textContent = '削除';
+                    deleteBtn.setAttribute('data-record-id', record.id);
+                    
+                    div.appendChild(itemInfo);
+                    div.appendChild(deleteBtn);
+                    todayContainer.appendChild(div);
+                }
+            }
+        }
+
+        function renderDashboard() {
+            var currentMonth = getCurrentMonth();
+            var monthPoints = getMonthPoints(currentMonth);
+            var totalPoints = calculateTotalPoints();
+            
+            document.getElementById('currentPoints').textContent = monthPoints + 'pt';
+            document.getElementById('totalPoints').textContent = totalPoints;
+            
+            var goal = data.monthlyGoals[currentMonth];
+            var goalDisplay = document.getElementById('goalDisplay');
+            
+            if (goal && goal > 0) {
+                goalDisplay.style.display = 'block';
+                document.getElementById('goalValue').textContent = goal;
+                var progress = Math.min((monthPoints / goal) * 100, 100);
+                document.getElementById('progressFill').style.width = progress + '%';
+                document.getElementById('progressFill').textContent = Math.round(progress) + '%';
+            } else {
+                goalDisplay.style.display = 'none';
+            }
+            
+            renderDashboardCalendar();
+        }
+
+        function renderDashboardCalendar() {
+            var year = dashboardViewDate.getFullYear();
+            var month = dashboardViewDate.getMonth();
+            
+            document.getElementById('dashCalendarTitle').textContent = year + '年' + (month + 1) + '月';
+            
+            var firstDay = new Date(year, month, 1);
+            var lastDay = new Date(year, month + 1, 0);
+            var prevLastDay = new Date(year, month, 0);
+            
+            var calendar = document.getElementById('dashboardCalendar');
+            calendar.innerHTML = '';
+            
+            var dayHeaders = ['日', '月', '火', '水', '木', '金', '土'];
+            for (var i = 0; i < dayHeaders.length; i++) {
+                var header = document.createElement('div');
+                header.className = 'cal-day-header';
+                header.textContent = dayHeaders[i];
+                calendar.appendChild(header);
+            }
+            
+            var firstDayOfWeek = firstDay.getDay();
+            for (var i = firstDayOfWeek - 1; i >= 0; i--) {
+                var day = prevLastDay.getDate() - i;
+                calendar.appendChild(createDashboardCalendarDay(year, month - 1, day, true));
+            }
+            
+            for (var day = 1; day <= lastDay.getDate(); day++) {
+                calendar.appendChild(createDashboardCalendarDay(year, month, day, false));
+            }
+            
+            var remainingCells = 42 - calendar.children.length + 7;
+            for (var day = 1; day <= remainingCells; day++) {
+                calendar.appendChild(createDashboardCalendarDay(year, month + 1, day, true));
+            }
+        }
+
+        function createDashboardCalendarDay(year, month, day, isOtherMonth) {
+            var cell = document.createElement('div');
+            cell.className = 'cal-day';
+            if (isOtherMonth) cell.classList.add('other-month');
+            
+            var date = new Date(year, month, day);
+            var today = new Date();
+            if (date.toDateString() === today.toDateString()) {
+                cell.classList.add('today');
+            }
+            
+            var dateStr = date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0');
+            
+            var dayRecords = data.records.filter(function(r) { return r.date === dateStr; });
+            var icons = [];
+            var dayPoints = 0;
+            
+            for (var i = 0; i < dayRecords.length; i++) {
+                var rec = dayRecords[i];
+                for (var j = 0; j < data.items.length; j++) {
+                    if (data.items[j].id === rec.itemId) {
+                        var item = data.items[j];
+                        icons.push(item.icon);
+                        dayPoints += item.points;
+                        break;
+                    }
+                }
+            }
+            
+            var iconsHtml = '';
+            if (icons.length > 0) {
+                iconsHtml = '<div class="cal-day-icons">' + icons.join(' ') + '</div>';
+            }
+            
+            var pointsHtml = dayPoints > 0 ? '<div class="cal-day-points">' + dayPoints + 'pt</div>' : '';
+            
+            cell.innerHTML = '<div class="cal-day-number">' + day + '</div>' + iconsHtml + pointsHtml;
+            
+            return cell;
+        }
+
+        function changeDashboardMonth(delta) {
+            dashboardViewDate.setMonth(dashboardViewDate.getMonth() + delta);
+            renderDashboardCalendar();
+        }
+
+        function setGoal() {
+            var goal = parseInt(document.getElementById('goalInput').value);
+            if (!goal) return;
+            
+            var currentMonth = getCurrentMonth();
+            data.monthlyGoals[currentMonth] = goal;
+            saveData();
+            renderDashboard();
+        }
+
+        function getMonthPoints(month) {
+            var total = 0;
+            for (var i = 0; i < data.records.length; i++) {
+                var r = data.records[i];
+                if (r.date.indexOf(month) === 0) {
+                    for (var j = 0; j < data.items.length; j++) {
+                        if (data.items[j].id === r.itemId) {
+                            total += data.items[j].points;
+                            break;
+                        }
+                    }
+                }
+            }
+            return total;
+        }
+
+        function renderHistory() {
+            var months = {};
+            for (var i = 0; i < data.records.length; i++) {
+                var r = data.records[i];
+                var month = r.date.substring(0, 7);
+                if (!months[month]) months[month] = [];
+                months[month].push(r);
+            }
+            
+            var container = document.getElementById('historyList');
+            container.innerHTML = '';
+            
+            var monthKeys = Object.keys(months).sort().reverse();
+            for (var j = 0; j < monthKeys.length; j++) {
+                var month = monthKeys[j];
+                var points = getMonthPoints(month);
+                var parts = month.split('-');
+                var year = parts[0];
+                var m = parseInt(parts[1]);
+                
+                var div = document.createElement('div');
+                div.className = 'history-month';
+                div.innerHTML = '<div class="history-month-header"><div class="history-month-title">' + year + '年' + m + '月</div><div class="history-month-points">' + points + 'pt</div></div>';
+                container.appendChild(div);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            renderColorPicker();
+            renderIconPicker();
+            renderDashboard();
+            renderItems();
+            renderRecordTab();
+            renderHistory();
+
+            document.querySelectorAll('.tab').forEach(function(tab) {
+                tab.addEventListener('click', function() {
+                    switchTab(this.getAttribute('data-tab'));
+                });
+            });
+
+            document.getElementById('setGoalBtn').addEventListener('click', setGoal);
+            document.getElementById('addItemBtn').addEventListener('click', addItem);
+            document.getElementById('dashPrevMonth').addEventListener('click', function() { changeDashboardMonth(-1); });
+            document.getElementById('dashNextMonth').addEventListener('click', function() { changeDashboardMonth(1); });
+
+            document.getElementById('colorPicker').addEventListener('click', function(e) {
+                if (e.target.classList.contains('color-option')) {
+                    var index = parseInt(e.target.getAttribute('data-index'));
+                    selectedColor = COLORS[index];
+                    document.querySelectorAll('.color-option').forEach(function(el, i) {
+                        if (i === index) {
+                            el.classList.add('selected');
+                        } else {
+                            el.classList.remove('selected');
+                        }
+                    });
+                }
+            });
+
+            document.getElementById('iconPicker').addEventListener('click', function(e) {
+                if (e.target.classList.contains('icon-option')) {
+                    var index = parseInt(e.target.getAttribute('data-index'));
+                    selectedIcon = ICONS[index];
+                    document.getElementById('iconInput').value = selectedIcon;
+                    document.querySelectorAll('.icon-option').forEach(function(el, i) {
+                        if (i === index) {
+                            el.classList.add('selected');
+                        } else {
+                            el.classList.remove('selected');
+                        }
+                    });
+                }
+            });
+
+            document.getElementById('managedItems').addEventListener('click', function(e) {
+                var editBtn = e.target.closest('[data-edit]');
+                var deleteBtn = e.target.closest('[data-delete]');
+                
+                if (editBtn) {
+                    editItem(parseInt(editBtn.getAttribute('data-edit')));
+                } else if (deleteBtn) {
+                    deleteItem(parseInt(deleteBtn.getAttribute('data-delete')));
+                }
+            });
+
+            document.getElementById('recordItemButtons').addEventListener('click', function(e) {
+                var btn = e.target.closest('[data-record]');
+                if (btn) {
+                    recordItem(parseInt(btn.getAttribute('data-record')));
+                }
+            });
+
+            document.addEventListener('click', function(e) {
+                if (e.target && e.target.hasAttribute('data-record-id')) {
+                    var id = parseInt(e.target.getAttribute('data-record-id'));
+                    deleteRecord(id);
+                }
+            });
+
+            document.getElementById('recordDate').addEventListener('change', function() {
+                renderRecordTab();
+            });
+
+            document.getElementById('iconInput').addEventListener('input', function() {
+                var inputIcon = this.value.trim();
+                if (inputIcon) {
+                    selectedIcon = inputIcon;
+                    document.querySelectorAll('.icon-option').forEach(function(el) {
+                        el.classList.remove('selected');
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
