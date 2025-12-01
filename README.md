@@ -1,5 +1,9 @@
 # ポイ活アプリ
 
+<p align="center">
+  <img src="favicon-star-coin.svg" width="128" height="128" alt="ポイ活アプリ アイコン">
+</p>
+
 日々の活動を記録してポイントを貯めるシンプルなアプリです。
 
 ## 公開ページ
