@@ -1,0 +1,28 @@
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGradV3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="coinGradV3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFA500;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="64" height="64" rx="12" fill="url(#bgGradV3)"/>
+
+  <!-- Coin 少し小さめ -->
+  <circle cx="36" cy="36" r="14" fill="url(#coinGradV3)"/>
+  <circle cx="36" cy="36" r="11.5" fill="none" stroke="#FFE55C" stroke-width="1.3"/>
+  <text x="36" y="42" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#FF8C00" text-anchor="middle">P</text>
+
+  <!-- Star やや大きめ -->
+  <g transform="translate(16, 14)">
+    <path d="M 13 0 L 15.6 9.5 L 26 11.7 L 19.5 18.6 L 20.8 29.2 L 13 23.8 L 5.2 29.2 L 6.5 18.6 L 0 11.7 L 10.4 9.5 Z"
+          fill="#FFF59D" stroke="#FFD700" stroke-width="1.6"/>
+    <path d="M 13 4.5 L 14.3 10.4 L 20.5 11.7 L 16.2 15.6 L 17 22 L 13 18.4 L 9 22 L 9.8 15.6 L 5.5 11.7 L 11.7 10.4 Z"
+          fill="#FFEB3B"/>
+  </g>
+</svg>

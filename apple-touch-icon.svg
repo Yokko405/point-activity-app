@@ -1,28 +1,28 @@
 <svg width="180" height="180" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="bgGradApple" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="bgGradApple2" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
       <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
     </linearGradient>
-    <linearGradient id="coinGradApple" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="coinGradApple2" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
       <stop offset="100%" style="stop-color:#FFA500;stop-opacity:1" />
     </linearGradient>
   </defs>
 
   <!-- Background with rounded corners for iOS -->
-  <rect width="180" height="180" rx="40" fill="url(#bgGradApple)"/>
+  <rect width="180" height="180" rx="40" fill="url(#bgGradApple2)"/>
 
-  <!-- Coin (larger for touch icon) -->
-  <circle cx="107" cy="102" r="45" fill="url(#coinGradApple)"/>
-  <circle cx="107" cy="102" r="37" fill="none" stroke="#FFE55C" stroke-width="4"/>
-  <text x="107" y="118" font-family="Arial, sans-serif" font-size="45" font-weight="bold" fill="#FF8C00" text-anchor="middle">P</text>
+  <!-- より大きいコインを中央に -->
+  <circle cx="90" cy="96" r="50" fill="url(#coinGradApple2)"/>
+  <circle cx="90" cy="96" r="42" fill="none" stroke="#FFE55C" stroke-width="4"/>
+  <text x="90" y="115" font-family="Arial, sans-serif" font-size="50" font-weight="bold" fill="#FF8C00" text-anchor="middle">P</text>
 
-  <!-- Star (larger for touch icon) -->
-  <g transform="translate(51, 45)">
-    <path d="M 34 0 L 40.5 24.8 L 67.5 30.3 L 50.7 48.4 L 54 76 L 34 62 L 14 76 L 17.3 48.4 L 0.5 30.3 L 27.5 24.8 Z"
-          fill="#FFF59D" stroke="#FFD700" stroke-width="4"/>
-    <path d="M 34 11 L 37.1 27 L 53.5 30.3 L 43.8 40.5 L 46.6 56.5 L 34 48 L 21.4 56.5 L 24.2 40.5 L 14.5 30.3 L 30.9 27 Z"
+  <!-- 小さい星を上に -->
+  <g transform="translate(57, 23)">
+    <path d="M 33 0 L 37.4 18.2 L 56.4 21.2 L 44.6 33.8 L 46.8 53.2 L 33 44.3 L 19.2 53.2 L 21.4 33.8 L 9.6 21.2 L 28.6 18.2 Z"
+          fill="#FFF59D" stroke="#FFD700" stroke-width="3.3"/>
+    <path d="M 33 8.3 L 35.8 19.8 L 45.4 21.2 L 39.1 28.3 L 40.5 38.5 L 33 33 L 25.5 38.5 L 26.9 28.3 L 20.6 21.2 L 30.2 19.8 Z"
           fill="#FFEB3B"/>
   </g>
 </svg>
