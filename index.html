@@ -112,7 +112,7 @@
 
         .dashboard-calendar {
             display: grid;
-            grid-template-columns: repeat(7, 1fr);
+            grid-template-columns: repeat(7, minmax(0, 1fr));
             gap: 5px;
             margin-top: 15px;
         }
@@ -136,6 +136,7 @@
             padding: 5px;
             position: relative;
             min-height: 60px;
+            min-width: 0;
         }
 
         .cal-day.other-month {
@@ -453,6 +454,51 @@
 
         .point-gain-animation {
             animation: pointGain 0.5s;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 5px;
+            }
+
+            .tab {
+                font-size: 12px;
+                padding: 12px 5px;
+            }
+
+            .tab-content {
+                padding: 15px 10px;
+            }
+
+            .calendar-nav-wrapper h3 {
+                font-size: 18px;
+            }
+
+            .calendar-nav {
+                font-size: 20px;
+                padding: 5px;
+            }
+
+            .dashboard-calendar {
+                gap: 3px;
+            }
+
+            .cal-day {
+                padding: 4px 3px;
+                min-height: 48px;
+            }
+
+            .cal-day-number {
+                font-size: 11px;
+            }
+
+            .cal-day-icons {
+                font-size: 12px;
+            }
+
+            .cal-day-points {
+                font-size: 8px;
+            }
         }
     </style>
 </head>
